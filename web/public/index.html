@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Github Hackathon</title>
+    <style media="screen">
+      body {
+        font-family: Roboto, Arial, sans-serif;
+        background: #ECEFF1;
+        color: rgba(0,0,0,0.87);
+      }
+
+      a {
+        color: rgb(3,155,229);
+      }
+
+      #message {
+        max-width: 400px;
+        margin: 40px auto;
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,0.2),0 1px 1px 0 rgba(0,0,0,0.14),0 2px 1px -1px rgba(0,0,0,0.12);
+        border-radius: 2px;
+        background: white;
+        padding: 16px 24px;
+      }
+
+      #message h1 {
+        font-size: 22px;
+        font-weight: 500;
+        text-align: center;
+        margin: 0 0 16px;
+      }
+
+      #message p {
+        font-weight: 300;
+        line-height: 150%;
+      }
+
+      #message ul {
+        list-style: none;
+        margin: 16px 0 0;
+        padding: 0;
+        text-align: center;
+      }
+
+      #message li a {
+        display: inline-block;
+        padding: 8px;
+        text-transform: uppercase;
+        text-decoration: none;
+        font-weight: 500;
+        background: rgb(3,155,229);
+        color: white;
+        border: 1px solid rgb(3,155,229);
+        border-radius: 3px;
+        font-size: 14px;
+        box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+      }
+    </style>
+  </head>
+  <body>
+      <h1>Github Hackathon</h1>
+  <!--
+    <div id="message">
+      <h1>Welcome to Firebase Hosting</h1>
+      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
+      <ul>
+        <li><a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a></li>
+      </ul>
+    </div>
+ <div id="firebaseui-auth-container"></div>
+    -->
+
+ <div id="github_hackathon_update-container"></div>
+
+ <hr>
+
+ <div id="github_hackathon_change-container"></div>
+
+ <div id="github_hackathon_html-container"></div>
+    <pre>
+ <div id="github_hackathon-container"></div>
+ </pre>
+<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyBbmGyEISRErxzTnL_89j4QAaKPrY5g87s",
+    authDomain: "github-hackathon.firebaseapp.com",
+    databaseURL: "https://github-hackathon.firebaseio.com",
+    storageBucket: "github-hackathon.appspot.com",
+  };
+  firebase.initializeApp(config);
+</script>
+<!--
+<script src="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.js"></script>
+<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.css" />
+<script type="text/javascript">
+      // FirebaseUI config.
+      var uiConfig = {
+        'signInSuccessUrl': '<url-to-redirect-to-on-success>',
+        'signInOptions': [
+          // Leave the lines as is for the providers you want to offer your users.
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+          firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+          firebase.auth.GithubAuthProvider.PROVIDER_ID,
+          firebase.auth.EmailAuthProvider.PROVIDER_ID
+        ],
+        // Terms of service url.
+        'tosUrl': '<your-tos-url>',
+      };
+
+      // Initialize the FirebaseUI Widget using Firebase.
+      var ui = new firebaseui.auth.AuthUI(firebase.auth());
+      // The start method will wait until the DOM is loaded.
+      ui.start('#firebaseui-auth-container', uiConfig);
+    </script>
+    -->
+<script>
+var now = new Date().getTime();
+var fullDaysSinceEpoch = Math.floor(now/8.64e7);
+var getProps = function (obj,div) {
+    //console.log('BEGINNING');
+    for (var property in obj) {
+        if (obj.hasOwnProperty(property) && obj[property] != null) {
+            if (obj[property].constructor == Object) {
+                getProps(obj[property],div);
+            } else if (obj[property].constructor == Array) {
+                for (var i = 0; i < obj[property].length; i++) {
+                    getProps(obj[property][i],div);
+                }
+            } else {
+                //console.log(property,obj[property]);
+                //if (property === "login") login=obj[property];
+                if (property === "avatar_url") {avatar_url=obj[property]; div.innerHTML+='<img src="'+avatar_url+'">';}
+                if (property === "name") {name=obj[property]; div.innerHTML+=' <b>'+name+'</b> <a href="https://github.com/'+name+'/pulse">pulse</a><hr>';}
+                if (property === "login") {login=obj[property]; div.innerHTML+=' <i>'+login+'</i>';}
+                //if (property === "a") console.log("added", obj[property]);
+                if (property === "w") {
+                    var ago = fullDaysSinceEpoch - Math.floor(new Date(parseInt(obj[property]) * 1000)) / 8.64e7;
+                    //console.log(fullDaysSinceEpoch - Math.floor(new Date(parseInt(obj[property]) * 1000)) / 8.64e7);
+                    if (ago < 10){
+                    //console.log(ago,JSON.stringify(obj));
+                    }
+                }
+            }
+        }
+    }
+    //console.log('ENDING');
+}
+
+var history={};
+
+var traverse = function(obj, div) {
+        //debugger;
+        //console.log('qqq',obj);
+        for (key1 in obj) {
+            div.innerHTML += ' <b>' + key1 + '</b>';
+            obj2 = obj[key1];
+            for (key2 in obj2) {
+                //div.innerHTML+=' <b>'+key2+'</b> '; // + obj2[key2]['data'].length + ' ' + JSON.stringify(obj2[key2])+ '<hr>';
+                var name = obj2[key2].name;
+                var obj3 = obj2[key2];
+                //console.log('obj3',obj3);
+                div.innerHTML += ' <b>' + name + '</b> <a href="https://github.com/' + name + '/pulse">pulse</a><br>';
+                if ('data' in obj3) {
+                var obj4=obj3.data;
+
+                    for (key4 in obj4) {
+                        //console.log('key3', key4);
+                        for (var i = 0; i < obj4[key4].length; i++) {
+                                //console.log('xxx',obj4[key4][i]);
+                                /**/
+                                //console.log(i);
+                                //div.innerHTML+='<br>'+ JSON.stringify(obj2[key2]['data'][i],null,2);
+                                //div.innerHTML+='<br>'+ obj2[key2]['data'][i];
+                                var author = obj4[key4][i].author;
+                                var weeks = obj4[key4][i].weeks;
+                                div.innerHTML += '<hr> <b>' + name + '</b> <a href="https://github.com/' + name + '/pulse">pulse</a><img src="' + author.avatar_url + '">';
+                                if (name+'-'+author.login in history){
+                                    if (history[name+'-'+author.login]!=JSON.stringify(weeks)){
+                                        console.log('CHANGED',name,author.login);
+                                        // github_hackathon_change-container
+                                        var msg2=document.getElementById('github_hackathon_change-container');
+                                        msg2.innerHTML=('<br>CHANGED '+new Date()+ ' ' + name + ' ' + author.login + ' ' + JSON.stringify(weeks))+msg2.innerHTML;
+                                    }
+                                }
+                                history[name+'-'+author.login]=JSON.stringify(weeks);
+                                div.innerHTML += ' <i>' + author.login + '</i>';
+                                //div.innerHTML += ' <i>weeks:' + JSON.stringify(weeks) + '</i>';
+                                div.innerHTML += ' <i>length:' + weeks.length + '</i>';
+                                //console.log('weeks',weeks);
+                                for (var j = 0; j < weeks.length; j++) { div.innerHTML += '<br>' + JSON.stringify(weeks[j], null, 2); }
+                                /*
+                                var str = '';
+                                for (var j = 0; j < weeks.length; j++) {
+                                    console.log(str);
+                                    str += '<br>' + weeks[j];
+                                }
+                                div.innerHTML += str;
+                                */
+                                /**/
+                            }
+                        }
+                    }
+                    div.innerHTML += '<hr>';
+
+                }
+            }
+        }
+//var hackRef = firebase.database().ref('hacks');
+var hackRefUpdate = firebase.database().ref('hacks/devfestnyc2016/updates');
+
+hackRefUpdate.limitToLast(100).on('child_added', function(snapshot) {
+    var treeupdate = snapshot.val();
+    console.log('update', treeupdate);
+  var msg2=document.getElementById('github_hackathon_update-container');
+  msg2.innerHTML = treeupdate.head_commit.timestamp+' <a href="' + treeupdate.compare + '">'+treeupdate.compare+'</a> ' + treeupdate.head_commit.message + '<br>' + msg2.innerHTML;
+});
+
+var hackRef = firebase.database().ref('hacks/devfestnyc2016/statsv2');
+hackRef.on('value', function(snapshot) {
+  //console.log( snapshot.val());
+  var tree = snapshot.val();
+  var msg1=document.getElementById('github_hackathon_html-container');
+  var msg=document.getElementById('github_hackathon-container');
+  msg.innerHTML='';
+  msg1.innerHTML='';
+    //getProps(tree,msg1);
+    //console.log('qqq',tree.devfestnyc2016.stats);
+    //traverse(tree.devfestnyc2016.stats,msg);
+    traverse(tree,msg1);
+  //for (var key1 in tree){ msg.innerHTML+=key1 + ' ' ; }
+  msg.innerHTML+=JSON.stringify(tree,null,2);
+  });
+</script>
+    
+  </body>
+</html>
